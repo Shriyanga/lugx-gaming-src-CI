@@ -1,0 +1,73 @@
+server:
+  port: 8084
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    healthcheck:
+      enabled: true
+
+management:
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://localhost:9411/api/v2/spans}
+      export:
+        enabled: true
+  health:
+    refresh:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+spring:
+  #  main:
+  #    web-application-type: reactive
+  #    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      fail-fast: false
+      retry:
+        initial-interval: 2000
+        max-attempts: 5
+        max-interval: 10000
+        multiplier: 1.5
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/gamelugx?serverTimezone=Asia/Colombo
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      validation-timeout: 3000
+      pool-name: GameServicePool
+      connection-test-query: SELECT 1
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    #    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+
+logging:
+  #  config: http://localhost:8088/log/logback.xml
+  file:
+    name: logs/GameService-log.txt
+  level:
+    root: INFO
+    org.springframework: WARN
+    org.springframework.web: ERROR
+    com.zaxxer.hikari: INFO
+    org.springframework.jdbc.datasource: WARN

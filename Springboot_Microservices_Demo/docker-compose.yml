@@ -1,0 +1,151 @@
+version: '4.0'
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  service-registry:
+    image: test/service-registry:latest
+    build: ./service-registry
+    container_name: service-registry
+    ports:
+      - "8761:8761"
+    depends_on:
+      - zipkin
+    environment:
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  config-server:
+    image: test/config-server:latest
+    build: ./config-server
+    container_name: config-server
+    ports:
+      - "8088:8088"
+    environment:
+      - SERVER_ADDRESS=0.0.0.0
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+      - AUTH_SERVICE_LB=http://auth-service:8081
+      - GAME_SERVICE_LB=http://game-service:8084
+      - ANALYTIC_SERVICE_LB=http://analytic-service:8085
+      - ORDER_SERVICE_LB=http://order-service:8086
+    depends_on:
+      - zipkin
+      - service-registry
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  auth-service:
+    image: test/auth-service:latest
+    build: ./auth-service
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8088
+    depends_on:
+      - zipkin
+      - service-registry
+      - config-server
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  game-service:
+    image: test/game-service:latest
+    build: ./game-service
+    container_name: game-service
+    ports:
+      - "8084:8084"
+    environment:
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8088
+    depends_on:
+      - zipkin
+      - service-registry
+      - config-server
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  analytic-service:
+    image: test/analytic-service:latest
+    build: ./analytic-service
+    container_name: analytic-service
+    ports:
+      - "8085:8085"
+    environment:
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8088
+    depends_on:
+      - zipkin
+      - service-registry
+      - config-server
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  order-service:
+    image: test/order-service:latest
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "8086:8086"
+    environment:
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8088
+    depends_on:
+      - zipkin
+      - service-registry
+      - config-server
+    restart: unless-stopped
+    networks:
+      - test-network
+
+  api-gateway:
+    image: thrimal/api-gateway:latest
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+      - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8088
+      - AUTH_SERVICE_LB=http://auth-service:8081
+      - GAME_SERVICE_LB=http://game-service:8084
+      - ANALYTIC_SERVICE_LB=http://analytic-service:8085
+      - ORDER_SERVICE_LB=http://order-service:8086
+    depends_on:
+      - zipkin
+      - service-registry
+      - config-server
+      - auth-service
+      - game-service
+      - analytic-service
+      - order-service
+    restart: unless-stopped
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+
+## to run this:
+  # docker compose up --build --force-recreate -d
