@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/New folder.iml" filepath="$PROJECT_DIR$/.idea/New folder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/analytic-service/analytic-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/analytic-service/analytic-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/api-gateway/api-gateway.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/api-gateway/api-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/auth-service/auth-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/auth-service/auth-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/config-server/config-server.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/config-server/config-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/department-service/department-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/department-service/department-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/employee-service/employee-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/employee-service/employee-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/game-service/game-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/game-service/game-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/order-service/order-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/order-service/order-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/service-registry/service-registry.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/service-registry/service-registry.iml" />
+    </modules>
+  </component>
+</project>
