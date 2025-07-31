@@ -24,6 +24,7 @@ public class GameController {
     @PostMapping
     public ResponseEntity<?> saveGame(@RequestBody GameDTO gameDTO) {
         GameDTO dto = gameService.saveGame(gameDTO);
+        System.out.println("hello");
         return new ResponseEntity<>(new StandardResponse<>(201, "Success", dto), HttpStatus.CREATED);
     }
 
