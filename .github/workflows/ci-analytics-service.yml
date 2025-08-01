@@ -3,7 +3,7 @@ name: CI - Analytics Service
 on:
   push:
     paths:
-      - 'backend/analytics-service/**'
+      - 'Springboot_Microservices_Demo/analytics-service/**'
       - '.github/workflows/ci-analytics-service.yml'
 
 jobs:
@@ -13,6 +13,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'corretto'
+        java-version: '17'
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -26,6 +32,8 @@ jobs:
 
     - name: Build and Push Docker image
       run: |
-        IMAGE=<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/analytics-service
-        docker build -t $IMAGE:latest ./backend/analytics-service
+        ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+        IMAGE=$ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/analytics-service
+
+        docker build -t $IMAGE:latest ./Springboot_Microservices_Demo/analytics-service
         docker push $IMAGE:latest
