@@ -5,7 +5,7 @@ on:
     paths:
       - 'Springboot_Microservices_Demo/analytics-service/**'
       - '.github/workflows/ci-analytics-service.yml'
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -35,14 +35,14 @@ jobs:
     - name: Set image URIs
       id: set-image-uri
       run: |
-        ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+        ACCOUNT_ID="115771043725"
         REGION="us-east-1"
         REPO_NAME="analytics-service"
         COMMIT_SHA=${GITHUB_SHA::7}
-        
+
         IMAGE_LATEST="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest"
         IMAGE_VERSIONED="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$COMMIT_SHA"
-        
+
         echo "IMAGE_LATEST=$IMAGE_LATEST" >> $GITHUB_ENV
         echo "IMAGE_VERSIONED=$IMAGE_VERSIONED" >> $GITHUB_ENV
 
@@ -57,6 +57,6 @@ jobs:
 
     - name: Done
       run: |
-        echo "   Successfully pushed:"
+        echo "  Successfully pushed both tags:"
         echo "  - $IMAGE_LATEST"
         echo "  - $IMAGE_VERSIONED"
