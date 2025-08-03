@@ -1,0 +1,89 @@
+
+name: CI -game Service
+
+on:
+  push:
+    paths:
+      - 'Springboot_Microservices_Demo/service-registry/**'
+      - '.github/workflows/ci-service-registry.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
+        run: |
+          chmod +x ./builds/git_update.sh
+          ./builds/git_update.sh -v patch
+
+      - name: Set image URIs
+        id: set-image-uri
+        run: |
+          ACCOUNT_ID="115771043725"
+          REGION="us-east-1"
+          REPO_NAME="service-registry"
+          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          IMAGE_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
+
+          echo "IMAGE_TAG=$IMAGE_TAG"
+          echo "COMMIT_SHA=$COMMIT_SHA"
+
+          IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG"
+          IMAGE_LATEST="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest"
+          IMAGE_VERSIONED="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$COMMIT_SHA"
+
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+          echo "IMAGE_LATEST=$IMAGE_LATEST" >> $GITHUB_ENV
+          echo "IMAGE_VERSIONED=$IMAGE_VERSIONED" >> $GITHUB_ENV
+
+      - name: Debug Image Tags
+        run: |
+          echo "IMAGE_URI=$IMAGE_URI"
+          echo "IMAGE_LATEST=$IMAGE_LATEST"
+          echo "IMAGE_VERSIONED=$IMAGE_VERSIONED"
+
+      - name: Build Docker Image
+        run: |
+          echo "Building Docker image..."
+          docker build \
+            -t $IMAGE_URI \
+            -t $IMAGE_LATEST \
+            -t $IMAGE_VERSIONED \
+            ./Springboot_Microservices_Demo/service-registry
+
+      - name: Push Docker Image to ECR
+        run: |
+          echo "Pushing Docker images..."
+          docker push $IMAGE_URI
+          docker push $IMAGE_LATEST
+          docker push $IMAGE_VERSIONED
+
+      - name: Done
+        run: |
+          echo "  Successfully pushed the following images to ECR:"
+          echo "- $IMAGE_URI"
+          echo "- $IMAGE_LATEST"
+          echo "- $IMAGE_VERSIONED"
