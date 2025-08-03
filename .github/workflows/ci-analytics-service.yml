@@ -37,7 +37,7 @@ jobs:
       run: |
         ACCOUNT_ID="115771043725"
         REGION="us-east-1"
-        REPO_NAME="analatic-service"
+        REPO_NAME="analatics-service"
         COMMIT_SHA=${GITHUB_SHA::7}
 
         IMAGE_LATEST="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest"
@@ -51,7 +51,7 @@ jobs:
         echo "Building Docker image..."
         docker build -t $IMAGE_LATEST -t $IMAGE_VERSIONED ./Springboot_Microservices_Demo/analytics-service
 
-    - name: Push Docker Images to ECR
+    - name: Push Docker Image to ECR
       run: |
         echo "Pushing Docker images..."
         docker push $IMAGE_LATEST
@@ -59,6 +59,9 @@ jobs:
 
     - name: Done
       run: |
+        echo "  Successfully pushed both tags:"
+        echo "  - $IMAGE_LATEST"
+        echo "  - $IMAGE_VERSIONED"
         echo "Successfully pushed:"
         echo "- $IMAGE_LATEST"
         echo "- $IMAGE_VERSIONED"
