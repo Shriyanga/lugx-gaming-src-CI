@@ -71,7 +71,7 @@ jobs:
             -t $IMAGE_URI \
             -t $IMAGE_LATEST \
             -t $IMAGE_VERSIONED \
-            ./Springboot_Microservices_Demo/api gateway
+            ./Springboot_Microservices_Demo/api-gateway
 
       - name: Push Docker Image to ECR
         run: |
@@ -86,3 +86,4 @@ jobs:
           echo "- $IMAGE_URI"
           echo "- $IMAGE_LATEST"
           echo "- $IMAGE_VERSIONED"
+
