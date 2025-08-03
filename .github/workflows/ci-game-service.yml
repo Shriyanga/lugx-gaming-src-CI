@@ -1,11 +1,11 @@
 
-name: CI - order Service
+name: CI -game Service
 
 on:
   push:
     paths:
-      - 'Springboot_Microservices_Demo/order-service/**'
-      - '.github/workflows/ci-order-service.yml'
+      - 'Springboot_Microservices_Demo/game-service/**'
+      - '.github/workflows/ci-game-service.yml'
   workflow_dispatch:
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
         run: |
           ACCOUNT_ID="115771043725"
           REGION="us-east-1"
-          REPO_NAME="order-service"
+          REPO_NAME="game-service"
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
           IMAGE_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
 
@@ -72,7 +72,7 @@ jobs:
             -t $IMAGE_URI \
             -t $IMAGE_LATEST \
             -t $IMAGE_VERSIONED \
-            ./Springboot_Microservices_Demo/order-service
+            ./Springboot_Microservices_Demo/game-service
 
       - name: Push Docker Image to ECR
         run: |
@@ -87,3 +87,4 @@ jobs:
           echo "- $IMAGE_URI"
           echo "- $IMAGE_LATEST"
           echo "- $IMAGE_VERSIONED"
+
