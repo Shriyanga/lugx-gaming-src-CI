@@ -117,7 +117,7 @@ services:
       - test-network
 
   api-gateway:
-    image: thrimal/api-gateway:latest
+    image: test/api-gateway:latest
     build: ./api-gateway
     container_name: api-gateway
     ports:
@@ -147,5 +147,5 @@ networks:
     driver: bridge
 
 
-## to run this:
+  ## to run this:
   # docker compose up --build --force-recreate -d
