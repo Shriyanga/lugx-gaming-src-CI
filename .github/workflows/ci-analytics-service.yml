@@ -71,7 +71,7 @@ jobs:
             -t $IMAGE_URI \
             -t $IMAGE_LATEST \
             -t $IMAGE_VERSIONED \
-            ./Springboot_Microservices_Demo/analytics-service
+            ./Springboot_Microservices_Demo/analytic-service
 
       - name: Push Docker Image to ECR
         run: |
