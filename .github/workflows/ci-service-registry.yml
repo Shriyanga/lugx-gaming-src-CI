@@ -1,5 +1,5 @@
 
-name: CI -game Service
+name: CI -service Service
 
 on:
   push:
@@ -87,3 +87,4 @@ jobs:
           echo "- $IMAGE_URI"
           echo "- $IMAGE_LATEST"
           echo "- $IMAGE_VERSIONED"
+
