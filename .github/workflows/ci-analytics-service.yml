@@ -6,6 +6,7 @@ on:
       - 'Springboot_Microservices_Demo/analytics-service/**'
       - '.github/workflows/ci-analytics-service.yml'
   workflow_dispatch:
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -43,32 +44,25 @@ jobs:
           ACCOUNT_ID="115771043725"
           REGION="us-east-1"
           REPO_NAME="analatics-service"
-          COMMIT_SHA=${GITHUB_SHA::7}
           IMAGE_TAG=${{ steps.increment-git-tag.outputs.git-tag }}
 
           IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG"
           IMAGE_LATEST="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest"
-          IMAGE_VERSIONED="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$COMMIT_SHA"
 
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
           echo "IMAGE_LATEST=$IMAGE_LATEST" >> $GITHUB_ENV
-          echo "IMAGE_VERSIONED=$IMAGE_VERSIONED" >> $GITHUB_ENV
 
       - name: Build Docker Image
         run: |
-          echo "Building Docker image..."
           docker build -t $IMAGE_URI -t $IMAGE_LATEST ./Springboot_Microservices_Demo/analytics-service
 
       - name: Push Docker Image to ECR
         run: |
-          echo "Pushing Docker images..."
           docker push $IMAGE_URI
           docker push $IMAGE_LATEST
-          docker push $IMAGE_VERSIONED
 
       - name: Done
         run: |
           echo "Successfully pushed:"
           echo "- $IMAGE_URI"
           echo "- $IMAGE_LATEST"
-          echo "- $IMAGE_VERSIONED"
