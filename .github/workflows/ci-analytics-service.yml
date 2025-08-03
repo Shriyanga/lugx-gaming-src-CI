@@ -58,7 +58,7 @@ jobs:
           echo "IMAGE_LATEST=$IMAGE_LATEST" >> $GITHUB_ENV
           echo "IMAGE_VERSIONED=$IMAGE_VERSIONED" >> $GITHUB_ENV
 
-      - name: Debug Environment Variables
+      - name: Debug Image Tags
         run: |
           echo "IMAGE_URI=$IMAGE_URI"
           echo "IMAGE_LATEST=$IMAGE_LATEST"
@@ -66,6 +66,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
+          echo "Building Docker image..."
           docker build \
             -t $IMAGE_URI \
             -t $IMAGE_LATEST \
@@ -74,13 +75,14 @@ jobs:
 
       - name: Push Docker Image to ECR
         run: |
+          echo "Pushing Docker images..."
           docker push $IMAGE_URI
           docker push $IMAGE_LATEST
           docker push $IMAGE_VERSIONED
 
       - name: Done
         run: |
-          echo "Successfully pushed:"
+          echo "  Successfully pushed the following images to ECR:"
           echo "- $IMAGE_URI"
           echo "- $IMAGE_LATEST"
           echo "- $IMAGE_VERSIONED"
