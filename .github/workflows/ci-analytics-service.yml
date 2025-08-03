@@ -5,13 +5,11 @@ on:
     paths:
       - 'Springboot_Microservices_Demo/analytics-service/**'
       - '.github/workflows/ci-analytics-service.yml'
-  workflow_dispatch:  
+  workflow_dispatch: 
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    outputs:
-      image-uri: ${{ steps.set-image-uri.outputs.image-uri }}
 
     steps:
     - name: Checkout code
@@ -31,24 +29,34 @@ jobs:
         aws-region: us-east-1
 
     - name: Login to Amazon ECR
+      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Set image URI
+    - name: Set image URIs
       id: set-image-uri
       run: |
-        IMAGE_URI="115771043725.dkr.ecr.us-east-1.amazonaws.com/analytics-service:latest"
-        echo "Image URI: $IMAGE_URI"
-        echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+        ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+        REGION="us-east-1"
+        REPO_NAME="analytics-service"
+        COMMIT_SHA=${GITHUB_SHA::7}
+        
+        IMAGE_LATEST="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest"
+        IMAGE_VERSIONED="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$COMMIT_SHA"
+        
+        echo "IMAGE_LATEST=$IMAGE_LATEST" >> $GITHUB_ENV
+        echo "IMAGE_VERSIONED=$IMAGE_VERSIONED" >> $GITHUB_ENV
 
-    - name: Build Docker image
+    - name: Build Docker Image
       run: |
-        echo "Building Docker image: ${{ steps.set-image-uri.outputs.image-uri }}"
-        docker build -t ${{ steps.set-image-uri.outputs.image-uri }} ./Springboot_Microservices_Demo/analytics-service
+        docker build -t $IMAGE_LATEST -t $IMAGE_VERSIONED ./Springboot_Microservices_Demo/analytics-service
 
-    - name: Push Docker image to ECR
+    - name: Push Docker Image to ECR
       run: |
-        echo "Pushing Docker image: ${{ steps.set-image-uri.outputs.image-uri }}"
-        docker push ${{ steps.set-image-uri.outputs.image-uri }}
+        docker push $IMAGE_LATEST
+        docker push $IMAGE_VERSIONED
 
     - name: Done
-      run: echo "Successfully pushed: ${{ steps.set-image-uri.outputs.image-uri }}"
+      run: |
+        echo "   Successfully pushed:"
+        echo "  - $IMAGE_LATEST"
+        echo "  - $IMAGE_VERSIONED"
