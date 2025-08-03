@@ -3,7 +3,7 @@ name: CI - Analytics Service
 on:
   push:
     paths:
-      - 'Springboot_Microservices_Demo/analytics-service/**'
+      - 'Springboot_Microservices_Demo/analytic-service/**'
       - '.github/workflows/ci-analytics-service.yml'
   workflow_dispatch:
 
