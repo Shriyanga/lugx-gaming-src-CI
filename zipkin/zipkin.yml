@@ -1,9 +1,6 @@
 name: Zipkin Service
 
 on:
-  push:
-    paths:
-     - 'zipkin/zipkin.yml'
   workflow_dispatch:
 
 jobs:
