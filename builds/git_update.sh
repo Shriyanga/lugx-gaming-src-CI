@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Default version increment type
 VERSION=""
 
-# Get version bump type from flags
+# Get CLI argument
 while getopts v: flag
 do
   case "${flag}" in
@@ -11,25 +10,23 @@ do
   esac
 done
 
-# Fetch all tags to ensure we get latest
+# Fetch latest tags
 git fetch --tags --force
-
-# Get current latest tag or fallback to v0.1.0
 CURRENT_VERSION=$(git describe --abbrev=0 --tags 2>/dev/null)
 
-if [[ -z "$CURRENT_VERSION" ]]; then
-  CURRENT_VERSION="v0.1.0"
+# Default to v0.1.0 if no tags
+if [[ "$CURRENT_VERSION" == "" ]]; then
+  CURRENT_VERSION="v0.1.1"
 fi
+echo "Current Version: $CURRENT_VERSION"
 
-echo " Current Version: $CURRENT_VERSION"
-
-# Parse version numbers (remove 'v' and split)
+# Split version
 CURRENT_VERSION_PARTS=(${CURRENT_VERSION//./ })
 VNUM1=${CURRENT_VERSION_PARTS[0]//v/}
 VNUM2=${CURRENT_VERSION_PARTS[1]}
 VNUM3=${CURRENT_VERSION_PARTS[2]}
 
-# Perform version bump
+# Bump version
 if [[ "$VERSION" == "major" ]]; then
   VNUM1=$((VNUM1 + 1))
   VNUM2=0
@@ -40,29 +37,26 @@ elif [[ "$VERSION" == "minor" ]]; then
 elif [[ "$VERSION" == "patch" ]]; then
   VNUM3=$((VNUM3 + 1))
 else
-  echo "❌ Invalid version type. Use: -v [major|minor|patch]"
+  echo "Invalid version type. Use: -v [major|minor|patch]"
   exit 1
 fi
 
-# Create new tag
 NEW_TAG="v$VNUM1.$VNUM2.$VNUM3"
-echo " ($VERSION) Bumping version: $CURRENT_VERSION → $NEW_TAG"
+echo "New tag: $NEW_TAG"
 
-# Check if current commit is already tagged
+# Check if this commit already has a tag
 GIT_COMMIT=$(git rev-parse HEAD)
-NEEDS_TAG=$(git describe --contains "$GIT_COMMIT" 2>/dev/null)
+EXISTING_TAG=$(git tag --points-at $GIT_COMMIT)
 
-if [[ -z "$NEEDS_TAG" ]]; then
-  git config user.email "ci-bot@example.com"
-  git config user.name "CI Bot"
+if [[ "$EXISTING_TAG" != *"$NEW_TAG"* ]]; then
+  git config user.name "github-actions"
+  git config user.email "github-actions@github.com"
   git tag "$NEW_TAG"
   git push origin "$NEW_TAG"
-  echo "  Tagged current commit with: $NEW_TAG"
+  echo "Tagged $GIT_COMMIT with $NEW_TAG"
 else
-  echo "ℹ  Current commit already has tag: $NEEDS_TAG"
+  echo "This commit already has a tag: $EXISTING_TAG"
 fi
 
 # Output for GitHub Actions
 echo "git-tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
-
-exit 0
