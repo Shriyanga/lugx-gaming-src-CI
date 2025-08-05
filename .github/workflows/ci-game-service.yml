@@ -1,5 +1,4 @@
-
-name: CI -game Service
+name: CI - game Service
 
 on:
   push:
@@ -39,52 +38,49 @@ jobs:
           chmod +x ./builds/git_update.sh
           ./builds/git_update.sh -v patch
 
-      - name: Set image URIs
-        id: set-image-uri
+      - name: Set Docker image tags
+        id: set-tags
         run: |
           ACCOUNT_ID="115771043725"
           REGION="us-east-1"
           REPO_NAME="game-service"
-          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          IMAGE_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
 
-          echo "IMAGE_TAG=$IMAGE_TAG"
-          echo "COMMIT_SHA=$COMMIT_SHA"
+          VERSION_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
+          GIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          REPO_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME"
 
-          IMAGE_URI="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG"
-          IMAGE_LATEST="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest"
-          IMAGE_VERSIONED="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$COMMIT_SHA"
-
-          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
-          echo "IMAGE_LATEST=$IMAGE_LATEST" >> $GITHUB_ENV
-          echo "IMAGE_VERSIONED=$IMAGE_VERSIONED" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$VERSION_TAG" >> $GITHUB_ENV
+          echo "IMAGE_SHA=$GIT_SHA" >> $GITHUB_ENV
+          echo "REPO_URI=$REPO_URI" >> $GITHUB_ENV
 
       - name: Debug Image Tags
         run: |
-          echo "IMAGE_URI=$IMAGE_URI"
-          echo "IMAGE_LATEST=$IMAGE_LATEST"
-          echo "IMAGE_VERSIONED=$IMAGE_VERSIONED"
+          echo "🪪 Docker Image Tags for game-service:"
+          echo "- Semantic Version Tag: $IMAGE_TAG"
+          echo "- Commit SHA Tag: $IMAGE_SHA"
+          echo "- Repository URI: $REPO_URI"
+          echo "- Full Image URIs:"
+          echo "  • $REPO_URI:$IMAGE_TAG"
+          echo "  • $REPO_URI:$IMAGE_SHA"
+          echo "  • $REPO_URI:latest"
 
       - name: Build Docker Image
         run: |
-          echo "Building Docker image..."
           docker build \
-            -t $IMAGE_URI \
-            -t $IMAGE_LATEST \
-            -t $IMAGE_VERSIONED \
+            -t $REPO_URI:$IMAGE_TAG \
+            -t $REPO_URI:latest \
+            -t $REPO_URI:$IMAGE_SHA \
             ./Springboot_Microservices_Demo/game-service
 
       - name: Push Docker Image to ECR
         run: |
-          echo "Pushing Docker images..."
-          docker push $IMAGE_URI
-          docker push $IMAGE_LATEST
-          docker push $IMAGE_VERSIONED
+          docker push $REPO_URI:$IMAGE_TAG
+          docker push $REPO_URI:$IMAGE_SHA
+          docker push $REPO_URI:latest
 
       - name: Done
         run: |
           echo "  Successfully pushed the following images to ECR:"
-          echo "- $IMAGE_URI"
-          echo "- $IMAGE_LATEST"
-          echo "- $IMAGE_VERSIONED"
-
+          echo "- $REPO_URI:$IMAGE_TAG"
+          echo "- $REPO_URI:$IMAGE_SHA"
+          echo "- $REPO_URI:latest"
