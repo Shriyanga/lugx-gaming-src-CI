@@ -1,4 +1,4 @@
-name: CI - Game Service
+name: CI - order Service
 
 on:
   push:
