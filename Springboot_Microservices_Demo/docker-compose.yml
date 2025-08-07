@@ -147,5 +147,5 @@ networks:
     driver: bridge
 
 
-  ## to run this:
+## to run this:
   # docker compose up --build --force-recreate -d
