@@ -10,19 +10,18 @@
         <module name="analytic-service" />
         <module name="auth-service" />
         <module name="game-service" />
+        <module name="department-service" />
         <module name="api-gateway" />
         <module name="order-service" />
         <module name="service-registry" />
-      </profile>
-      <profile name="Annotation profile for department-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.m2/repository/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
-        </processorPath>
-        <module name="department-service" />
         <module name="employee-service" />
+      </profile>
+      <profile name="Annotation profile for Unknown" enabled="true">
+        <sourceOutputDir name="../../target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../../target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="wrapper (2)" />
+        <module name="wrapper (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -35,6 +34,8 @@
       <module name="game-service" target="17" />
       <module name="order-service" target="17" />
       <module name="service-registry" target="17" />
+      <module name="wrapper (1)" target="1.5" />
+      <module name="wrapper (2)" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

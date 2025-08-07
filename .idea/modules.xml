@@ -12,6 +12,8 @@
       <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/game-service/game-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/game-service/game-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/order-service/order-service.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/order-service/order-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/service-registry/service-registry.iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/service-registry/service-registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/department-service/.mvn/wrapper/wrapper (1).iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/department-service/.mvn/wrapper/wrapper (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/Springboot_Microservices_Demo/employee-service/.mvn/wrapper/wrapper (2).iml" filepath="$PROJECT_DIR$/Springboot_Microservices_Demo/employee-service/.mvn/wrapper/wrapper (2).iml" />
     </modules>
   </component>
 </project>
