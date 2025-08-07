@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="config-server" />
+        <module name="analytic-service" />
+        <module name="auth-service" />
+        <module name="game-service" />
+        <module name="api-gateway" />
+        <module name="order-service" />
+        <module name="service-registry" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="analytic-service" target="17" />
+      <module name="api-gateway" target="17" />
+      <module name="auth-service" target="17" />
+      <module name="config-server" target="17" />
+      <module name="game-service" target="17" />
+      <module name="order-service" target="17" />
+      <module name="service-registry" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="analytic-service" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="config-server" options="-parameters" />
+      <module name="game-service" options="-parameters" />
+      <module name="order-service" options="-parameters" />
+      <module name="service-registry" options="-parameters" />
+    </option>
+  </component>
+</project>
