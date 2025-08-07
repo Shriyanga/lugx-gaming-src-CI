@@ -45,7 +45,7 @@ jobs:
         run: |
           ACCOUNT_ID="115771043725"
           REGION="us-east-1"
-          REPO_NAME="config-server"
+          REPO_NAME="config-service"
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
           IMAGE_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
 
