@@ -1,10 +1,10 @@
-name: CI - Analytics Service
+name: CI - Auth Service
 
 on:
   push:
     paths:
-      - 'Springboot_Microservices_Demo/analytics-service/**'
-      - '.github/workflows/ci-analytics-service.yml'
+      - 'Springboot_Microservices_Demo/auth-service/**'
+      - '.github/workflows/ci-auth-service.yml'
   workflow_dispatch:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Required to fetch all tags
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -45,7 +45,7 @@ jobs:
         run: |
           ACCOUNT_ID="115771043725"
           REGION="us-east-1"
-          REPO_NAME="analytics-service"
+          REPO_NAME="auth-service"
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
           IMAGE_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
 
@@ -63,7 +63,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build --no-cache -t $IMAGE_LATEST -t $IMAGE_SHA -t $IMAGE_VERSIONED ./Springboot_Microservices_Demo/analytics-service
+          docker build --no-cache -t $IMAGE_LATEST -t $IMAGE_SHA -t $IMAGE_VERSIONED ./Springboot_Microservices_Demo/auth-service
 
       - name: Push Docker Images
         run: |
