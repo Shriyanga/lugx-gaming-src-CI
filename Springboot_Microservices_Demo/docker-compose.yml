@@ -9,6 +9,19 @@ services:
     networks:
       - test-network
 
+  clickhouse-server:
+    image: clickhouse/clickhouse-server
+    container_name: clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: 1234
+    restart: unless-stopped
+    networks:
+      - test-network
+
   service-registry:
     image: test/service-registry:latest
     build: ./service-registry
@@ -90,6 +103,7 @@ services:
       - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
       - EUREKA_SERVER_URL=http://service-registry:8761/eureka/
       - CONFIG_SERVER_URL=http://config-server:8088
+      - CLICKHOUSE_URL=jdbc:clickhouse://clickhouse-server:8123/default
     depends_on:
       - zipkin
       - service-registry
@@ -146,6 +160,9 @@ networks:
   test-network:
     driver: bridge
 
+# docker pull clickhouse/clickhouse-server
+# docker run -d --name clickhouse-server -p 8123:8123 -p 9000:9000 -e CLICKHOUSE_USER=default -e CLICKHOUSE_PASSWORD=1234 clickhouse/clickhouse-server
+# docker exec -it clickhouse-server clickhouse-client
 
 ## to run this:
   # docker compose up --build --force-recreate -d
