@@ -1,0 +1,72 @@
+name: CI - ClickHouse Image (retag & push)
+
+on:
+  # Change this trigger to whatever you prefer 
+  push:
+    paths:
+      - '.github/workflows/ci-clickhouse.yml'
+      # - 'infra/clickhouse/**'   
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  ACCOUNT_ID: "115771043725"
+  REPO_NAME: "clickhouse-server"
+
+  CLICKHOUSE_VERSION: "24.8"   
+
+jobs:
+  retag-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (for completeness)
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Ensure ECR repo exists
+        run: |
+          aws ecr describe-repositories --repository-names $REPO_NAME >/dev/null 2>&1 \
+            || aws ecr create-repository --repository-name $REPO_NAME
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Compute tags
+        id: tags
+        run: |
+          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          IMAGE_BASE="$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME"
+          echo "sha=$IMAGE_BASE:$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "latest=$IMAGE_BASE:latest"   >> $GITHUB_OUTPUT
+          echo "ver=$IMAGE_BASE:$CLICKHOUSE_VERSION" >> $GITHUB_OUTPUT
+          echo "commit_short=$COMMIT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Pull official ClickHouse image
+        run: |
+          docker pull clickhouse/clickhouse-server:${{ env.CLICKHOUSE_VERSION }}
+
+      - name: Retag for ECR
+        run: |
+          docker tag clickhouse/clickhouse-server:${{ env.CLICKHOUSE_VERSION }} ${{ steps.tags.outputs.ver }}
+          docker tag clickhouse/clickhouse-server:${{ env.CLICKHOUSE_VERSION }} ${{ steps.tags.outputs.latest }}
+          docker tag clickhouse/clickhouse-server:${{ env.CLICKHOUSE_VERSION }} ${{ steps.tags.outputs.sha }}
+
+      - name: Push to ECR
+        run: |
+          docker push ${{ steps.tags.outputs.ver }}
+          docker push ${{ steps.tags.outputs.latest }}
+          docker push ${{ steps.tags.outputs.sha }}
+
+      - name: Done
+        run: |
+          echo "Pushed:"
+          echo " - ${{ steps.tags.outputs.ver }}"
+          echo " - ${{ steps.tags.outputs.latest }}"
+          echo " - ${{ steps.tags.outputs.sha }}"
