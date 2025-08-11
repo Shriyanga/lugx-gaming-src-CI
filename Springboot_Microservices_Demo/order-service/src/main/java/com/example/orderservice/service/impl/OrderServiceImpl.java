@@ -17,11 +17,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * @author: Raigam Marketing Services
- * @developer: Thrimal Avishka
- * @since: 26-Jul-25
- **/
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {

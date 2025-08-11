@@ -8,11 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 
-/**
- * @author: Raigam Marketing Services
- * @developer: Thrimal Avishka
- * @since: 26-Jul-25
- **/
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -8,10 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * @author Thrimal Avishka
- * @since 08-Aug-25
- **/
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

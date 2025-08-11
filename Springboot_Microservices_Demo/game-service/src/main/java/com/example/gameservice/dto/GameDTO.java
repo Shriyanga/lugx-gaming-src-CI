@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-/**
- * @author Thrimal Avishka
- * @since 12-Jul-25
- **/
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

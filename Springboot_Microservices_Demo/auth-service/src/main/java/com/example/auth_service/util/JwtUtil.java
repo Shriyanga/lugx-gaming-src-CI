@@ -16,10 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * @author Thrimal Avishka <thrimalavishka99@gmail.com>
- * @since 06-Dec-23
- */
+
 @Component
 public class JwtUtil implements Serializable {
 

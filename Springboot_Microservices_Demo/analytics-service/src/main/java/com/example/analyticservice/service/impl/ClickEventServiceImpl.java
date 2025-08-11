@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Thrimal Avishka
- * @since 08-Aug-25
- **/
+
 @Service
 @Transactional
 public class ClickEventServiceImpl implements ClickEventService {

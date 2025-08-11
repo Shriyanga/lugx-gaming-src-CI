@@ -5,10 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-/**
- * @author Thrimal Avishka
- * @since 12-Jul-25
- **/
+
 @Configuration
 @EnableJpaAuditing
 public class WebAppConfig {

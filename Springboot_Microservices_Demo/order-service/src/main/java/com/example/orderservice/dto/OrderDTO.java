@@ -6,11 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * @author: Raigam Marketing Services
- * @developer: Thrimal Avishka
- * @since: 26-Jul-25
- **/
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

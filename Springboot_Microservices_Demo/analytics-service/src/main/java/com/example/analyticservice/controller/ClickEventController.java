@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author Thrimal Avishka
- * @since 08-Aug-25
- **/
+
 @RestController
 @RequestMapping("/api/v1/analytic/click-events")
 public class ClickEventController {

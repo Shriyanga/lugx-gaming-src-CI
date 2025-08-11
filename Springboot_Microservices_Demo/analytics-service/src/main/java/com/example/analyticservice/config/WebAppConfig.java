@@ -12,10 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
-/**
- * @author Thrimal Avishka
- * @since 08-Aug-25
- **/
+
 @Configuration
 public class WebAppConfig {
 

@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @author Thrimal Avishka
- * @since 12-Jul-25
- **/
+
 @Service
 @Transactional
 public class GameServiceImpl implements GameService {

@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author Thrimal Avishka
- * @since 12-Jul-25
- **/
+
 @RestController
 @RequestMapping("/api/v1/game")
 public class GameController {

@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 
-/**
- * @author: Thrimal Avishka
- * @since: 2025-02-25
- */
+
 @Component
 public class JwtUtil {
 

@@ -8,10 +8,7 @@ import org.springframework.web.server.WebFilter;
 
 import java.util.List;
 
-/**
- * @author: Thrimal Avishka
- * @since: 2025-02-25
- */
+
 @Configuration
 public class WebAppConfig {
 

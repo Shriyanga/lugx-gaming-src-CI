@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author: Raigam Marketing Services
- * @developer: Thrimal Avishka
- * @since: 26-Jul-25
- **/
+
 @RestController
 @RequestMapping("/api/v1/order")
 public class OrderController {
