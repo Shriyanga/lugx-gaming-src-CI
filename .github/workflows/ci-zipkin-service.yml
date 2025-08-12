@@ -1,0 +1,75 @@
+name: CI - Zipkin Service
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ci-zipkin-service.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # IMPORTANT: Needed to fetch all tags
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Automatic Tagging of Releases
+        id: increment-git-tag
+        run: |
+          chmod +x ./builds/git_update.sh
+          ./builds/git_update.sh -v patch
+
+      - name: Set image URIs
+        id: set-image-uri
+        run: |
+          ACCOUNT_ID="115771043725"
+          REGION="us-east-1"
+          REPO_NAME="zipkin-server"
+          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          IMAGE_TAG="${{ steps.increment-git-tag.outputs.git-tag }}"
+
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "IMAGE_LATEST=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:latest" >> $GITHUB_ENV
+          echo "IMAGE_SHA=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$COMMIT_SHA" >> $GITHUB_ENV
+          echo "IMAGE_VERSIONED=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Debug Image Tags
+        run: |
+          echo "Tag: $IMAGE_TAG"
+          echo "Latest: $IMAGE_LATEST"
+          echo "SHA: $IMAGE_SHA"
+          echo "Versioned: $IMAGE_VERSIONED"
+
+      - name: Pull and Tag Zipkin Image
+        run: |
+          docker pull openzipkin/zipkin:latest
+          docker tag openzipkin/zipkin:latest $IMAGE_LATEST
+          docker tag openzipkin/zipkin:latest $IMAGE_SHA
+          docker tag openzipkin/zipkin:latest $IMAGE_VERSIONED
+
+      - name: Push Docker Images
+        run: |
+          docker push $IMAGE_LATEST
+          docker push $IMAGE_SHA
+          docker push $IMAGE_VERSIONED
+
+      - name: Done
+        run: |
+          echo " All images pushed:"
+          echo " - $IMAGE_VERSIONED"
+          echo " - $IMAGE_LATEST"
+          echo " - $IMAGE_SHA"
