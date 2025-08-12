@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * @author: Thrimal Avishka
+ * @since: 2025-02-24
+ */
 
 @RestController
 @RequestMapping("/api/v1/user")

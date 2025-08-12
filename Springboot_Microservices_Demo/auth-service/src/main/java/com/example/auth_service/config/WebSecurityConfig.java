@@ -16,7 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.List;
 
-
+/**
+ * @author Thrimal Avishka
+ * @since 15-Nov-23
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
