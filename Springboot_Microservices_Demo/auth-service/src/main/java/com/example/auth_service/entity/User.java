@@ -12,10 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author: Thrimal Avishka
- * @since: 2025-02-24
- */
+
 
 @Data
 @NoArgsConstructor
