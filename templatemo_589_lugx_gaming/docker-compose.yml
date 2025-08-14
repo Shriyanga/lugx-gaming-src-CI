@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+# docker compose up --build --force-recreate -d
