@@ -63,7 +63,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build --no-cache -t $IMAGE_LATEST -t $IMAGE_SHA -t $IMAGE_VERSIONED ./Springboot_Microservices_Demo/frontend-service
+          docker build --no-cache -t $IMAGE_LATEST -t $IMAGE_SHA -t $IMAGE_VERSIONED ./templatemo_589_lugx_gaming/
 
       - name: Push Docker Images
         run: |
