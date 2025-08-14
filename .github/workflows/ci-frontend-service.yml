@@ -3,7 +3,7 @@ name: CI - Frontend Service
 on:
   push:
     paths:
-      - 'Springboot_Microservices_Demo/frontend-service/**'
+      - 'templatemo_589_lugx_gaming/**'
       - '.github/workflows/ci-frontend-service.yml'
   workflow_dispatch:
 
