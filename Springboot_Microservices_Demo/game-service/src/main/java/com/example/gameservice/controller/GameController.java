@@ -45,6 +45,6 @@ public class GameController {
     @GetMapping
     public ResponseEntity<?> getAllGames(){
         List<GameDTO> allGames = gameService.findAllGames();
-        return new ResponseEntity<>(new StandardResponse<>(200, "Success", allGames), HttpStatus.OK);
+        return new ResponseEntity<>(new StandardResponse<>(200, "Success pull image ", allGames), HttpStatus.OK);
     }
 }
